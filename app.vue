@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useFloor } from '@vueuse/math'
 
 const token = process.env.YNAB_TOKEN as string;
 
@@ -32,23 +33,30 @@ function myCat () {
   })
   console.log(transactions.value.data.transactions[0])
 }
+let categoryAmount = computed (() =>{
+  let sum = category.value?.budgeted > 0 ? category.value?.budgeted/10 : 0
+  // let sum = (category.value?.budgeted ? category.value?.budgeted : 33 )/10
+  let hold = Number(sum.toFixed())
 
+  return hold/100
+}
+)
 </script>
 
 <template>
-<button @click="myCat()" >hi</button>
-<h1>Hello World</h1>
+<!-- <button @click="myCat()" >hi</button>
+<h1>Hello World</h1> -->
 <p>{{ smt }}</p>
-<div>{{ categories.data.category_groups[2].name }}</div>
+<h1>{{ categories.data.category_groups[2].name }}</h1>
 <select v-model="category" @click="">
   <option disabled value="">Bills</option>
   <option :key="category.id" v-for="category in categories.data.category_groups[2].categories"  :value="category">{{ category.name }}</option>
 </select>
 
 <h3>{{ category?.name }}</h3>
-<h3>{{ category?.balance }}</h3>
-<p>{{ category }}</p>
-<p>{{ transactions.category }}</p>
-<p>{{ transactions }}</p>
-<p>hello world! Programming together</p>
+<h3>Available:{{ category?.balance }}</h3>
+<h3>Budgeted:{{categoryAmount}}</h3>
+<h3>Category's transactions:{{ category?.activity }}</h3>
+<h3>Money Priority:{{ category?.goal_type }}</h3>
+
 </template>
