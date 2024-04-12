@@ -44,8 +44,7 @@ let categoryAmount = computed (() =>{
 </script>
 
 <template>
-<!-- <button @click="myCat()" >hi</button>
-<h1>Hello World</h1> -->
+
 <p>{{ smt }}</p>
 <h1>{{ categories.data.category_groups[2].name }}</h1>
 <select v-model="category" @click="">
