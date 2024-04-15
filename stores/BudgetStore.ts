@@ -6,6 +6,7 @@ export const useBudgetStore = defineStore('budgets', {
       budgets: [],
       categories: [],
       payees: [],
+      months: [],
     }), 
     actions: {
       async getBudgets() {
@@ -31,7 +32,15 @@ export const useBudgetStore = defineStore('budgets', {
           this.payees.length=0
           response.data.payees.forEach((element) => this.payees.push(element))
         })
-      }
+      },
+      async getMonth(budgetId: string) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/months`, {
+          headers: {Authorization: `Bearer ${this.token}`}
+        }).then((response) => {
+          this.months.length=0
+          response.data.months.forEach((element) => this.months.push(element))
+        })
+      },
     },
     getters: {
       filterPayees() {
