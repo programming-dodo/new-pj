@@ -7,7 +7,7 @@ export const useBudgetStore = defineStore('budgets', {
       categories: [],
       payees: [],
       months: [],
-      selectedBudget: {}
+      selectedBudget: null
     }), 
     actions: {
       async getBudgets() {

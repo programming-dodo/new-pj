@@ -5,6 +5,17 @@ const budgetStore = useBudgetStore()
 var date = ref()
 var payee = ref()
 var category = ref()
+var newTransaction = {
+    accountId: String,
+    date: Date,
+    payee_id: String,
+    payee_name: String,
+    //nq
+    memo: String,
+    //maxLength: 200, nullable: true
+    cleared: String,
+    //options [cleared, uncleared, reconciled]
+}
 onBeforeMount(() => {
     const budgetId = budgetStore.selectedBudget.id
     budgetStore.getCategories(budgetId)
@@ -29,5 +40,6 @@ onBeforeMount(() => {
         <input type="text"><br/>
         <p>inflow</p>
         <input type="text"><br/>
+        <button>Save Transaction</button>
     </div>
 </template>
