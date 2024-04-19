@@ -5,6 +5,7 @@ var selectedBudget  = ref()
 var selectedCategory = ref()
 var selectedMonth = ref()
 var selectedPayee = ref()
+
 </script>
 
 <template>
@@ -30,10 +31,12 @@ var selectedPayee = ref()
   <select v-model="selectedMonth" v-if="budgetStore.months.length != 0">
     <option v-for="month in budgetStore.months" :key="month.month" :value="month">{{ month.month }}</option>
   </select>
+  <NuxtLink to="/transaction"><button>+ New Transaction</button></NuxtLink>
   <p>{{ selectedCategory?.name }}</p>
   <p>{{ selectedBudget?.name, "CSAR" }}</p>
   <p>{{  selectedPayee?.name }}</p>
   <p>{{ selectedMonth?.month }}</p>
   <p></p>
 </div>
+  <NuxtPage />
 </template>
