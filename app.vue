@@ -31,7 +31,7 @@ var selectedPayee = ref()
   <select v-model="selectedMonth" v-if="budgetStore.months.length != 0">
     <option v-for="month in budgetStore.months" :key="month.month" :value="month">{{ month.month }}</option>
   </select>
-  <NuxtLink to="/transaction"><button>+ New Transaction</button></NuxtLink>
+  <NuxtLink to="/transaction"><button @click="budgetStore.selectedBudget = selectedBudget">+ New Transaction</button></NuxtLink>
   <p>{{ selectedCategory?.name }}</p>
   <p>{{ selectedBudget?.name, "CSAR" }}</p>
   <p>{{  selectedPayee?.name }}</p>
