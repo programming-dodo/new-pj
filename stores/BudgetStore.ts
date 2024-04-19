@@ -33,6 +33,14 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.payees.forEach((element) => this.payees.push(element))
         })
       },
+      async getBalance(budgetId: string) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/balance`,{
+          headers: {Authorization: `Bearer ${this.token}`}
+        }).then((response)=> {
+          this.getBalance.length=0
+          response.data.balance.forEach((element) => this.getBalance.push(element))
+        })
+      },
       async getMonth(budgetId: string) {
         await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/months`, {
           headers: {Authorization: `Bearer ${this.token}`}
@@ -44,12 +52,11 @@ export const useBudgetStore = defineStore('budgets', {
     },
     getters: {
       filterPayees() {
-        var name1 = "Starting Balance"
-        var name2 = "Manual Balance Adjustment"
-        var name3 = "Reconciliation Balance Adjustment"
+        var notIncluding = ["Starting Balance","Manual Balance Adjustment","Reconciliation Balance Adjustment"]
         var retPayees: [] = []
         this.payees.forEach((payee) => {
-          if(payee?.transfer_account_id == null && payee.name != name1 && payee.name != name2 && payee.name != name3) {
+          var contained = filterItemsOut(payee.name, notIncluding)
+          if (!contained && payee?.transfer_account_id == null) {
             retPayees.push(payee)
           }
         })
@@ -57,6 +64,16 @@ export const useBudgetStore = defineStore('budgets', {
       }
     },
 })
+
+function filterItemsOut(checkItem: any, againstArray: [any]) {
+   var contained: boolean = false
+   againstArray.forEach(item => {
+    if (checkItem == item) {
+      contained = true
+    }
+  })
+  return contained
+}
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useBudgetStore, import.meta.hot))
