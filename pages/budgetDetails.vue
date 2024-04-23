@@ -6,27 +6,24 @@ var selectedBudget  = ref()
 var selectedCategory = ref()
 var selectedMonths = ref()
 var selectedPayee = ref()
+var selectedSubCat = ref()
 
-function callData() {
-  // budgetStore.se
-
-}
 var sortingCategories = computed(()=> {
   var givingBack: any[] | undefined = []
-  if (selectedCategory.value != undefined) {
-    console.log(selectedCategory.value)
-  // console.log(selectedCategory.value?.categories)
-  // console.log(selectedCategory.value?.id)
+  if (selectedSubCat.value != undefined) {
   budgetStore.transactions.forEach((transaction) => {
-    console.log(transaction.category_id)
-    // if (transaction?.category_id == selectedCategory.value?.id) {
-    //   givingBack.push(transaction)
-    // }
+    console.log("TCI", transaction.category_id, transaction.category_name,"SCI", selectedSubCat.value?.id)
+    if (transaction.category_id == selectedSubCat.value?.id) {
+      givingBack?.push(transaction)
+    }
   })
   return givingBack
 }
 
 })
+function capitalizeFirstLetter(string: String) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 </script>
 <template>
@@ -51,13 +48,20 @@ var sortingCategories = computed(()=> {
     <select v-model="selectedMonths" v-if="budgetStore.months.length != 0">
       <option v-for="month in budgetStore.months" :key="month.month" :value="month">{{ month.month }}</option>
     </select>
-    <p>{{ selectedCategory?.name }}</p>
+    <select v-model="selectedSubCat" v-if="selectedCategory != undefined">
+      <option v-for="category in selectedCategory.categories" :value="category">{{ category.name }}</option>
+    </select>
+    <!-- <p>{{ selectedCategory?.name }}</p>
     <p>{{ selectedBudget?.name, "CSAR" }}</p>
     <p>{{  selectedPayee?.name }}</p>
-    <p>{{ selectedMonths?.month }}</p>
-    <div v-for="transaction in budgetStore.transactions" :key="transaction.id">
+    <p>{{ selectedMonths?.month }}</p> -->
+    <!-- <div v-for="transaction in budgetStore.transactions" :key="transaction.id">
       <p>payee: {{ transaction.payee_name }}</p><p v-if="transaction.memo != null ">Memo: {{ transaction.memo }}</p>
+    </div> -->
+    <div v-for="cat in sortingCategories" :key="cat?.id">
+      <p> Amount: {{ cat?.amount }}</p>
+      <p v-if="cat.memo != null">Memo: {{ cat?.memo }}</p>
+      <p>Payee: {{ capitalizeFirstLetter(cat?.payee_name) }}</p>
     </div>
-    <p> {{ sortingCategories }}</p>
   </div>
 </template>
