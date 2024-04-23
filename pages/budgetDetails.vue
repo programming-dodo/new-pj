@@ -6,7 +6,27 @@ var selectedBudget  = ref()
 var selectedCategory = ref()
 var selectedMonths = ref()
 var selectedPayee = ref()
-var transactions = ref()
+
+function callData() {
+  // budgetStore.se
+
+}
+var sortingCategories = computed(()=> {
+  var givingBack: any[] | undefined = []
+  if (selectedCategory.value != undefined) {
+    console.log(selectedCategory.value)
+  // console.log(selectedCategory.value?.categories)
+  // console.log(selectedCategory.value?.id)
+  budgetStore.transactions.forEach((transaction) => {
+    console.log(transaction.category_id)
+    // if (transaction?.category_id == selectedCategory.value?.id) {
+    //   givingBack.push(transaction)
+    // }
+  })
+  return givingBack
+}
+
+})
 
 </script>
 <template>
@@ -16,14 +36,6 @@ var transactions = ref()
     <button @click="budgetStore.getPayees(budgetStore.selectedBudget.id)" v-if="budgetStore.selectedBudget != null">Payees</button>
     <button @click="budgetStore.getCategories(budgetStore.selectedBudget.id)" v-if="budgetStore.selectedBudget != null">displayCategories</button>
     <button @click="budgetStore.getTransactions(budgetStore.selectedBudget.id)" v-if="budgetStore.selectedBudget != null">display transactions</button>
-
-<!-- <select v-model="budgetStore.transactions">
-  <option disabled>transactions
-  </option>
-    <option v-for="transaction in budgetStore.transactions" :value="transaction" :key="transaction.id" v-if="budgetStore.transactions.length != 0">
-   {{ transaction.payee_name, transaction.memo }}
-  </option>
-</select> -->
     <select v-model="budgetStore.selectedBudget">
       <option disabled >budget</option>
       <option v-for="budget in budgetStore.budgets" :value="budget" :key="budget.id">
@@ -46,6 +58,6 @@ var transactions = ref()
     <div v-for="transaction in budgetStore.transactions" :key="transaction.id">
       <p>payee: {{ transaction.payee_name }}</p><p v-if="transaction.memo != null ">Memo: {{ transaction.memo }}</p>
     </div>
-    <p></p>
+    <p> {{ sortingCategories }}</p>
   </div>
 </template>

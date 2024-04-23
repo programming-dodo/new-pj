@@ -30,7 +30,6 @@ export const useBudgetStore = defineStore('budgets', {
         }).then((response) => {
           this.transactions.length = 0
           response.data.transactions.forEach((element) => this.transactions.push(element))
-          console.log(response.data.transactions)
         })
       },
       async getCategories(budgetId: string) {
