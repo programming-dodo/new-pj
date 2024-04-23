@@ -2,7 +2,6 @@
 import { useBudgetStore } from '../stores/BudgetStore';
 
 const budgetStore = useBudgetStore()
-var selectedBudget  = ref()
 var selectedCategory = ref()
 var selectedMonths = ref()
 var selectedPayee = ref()
@@ -51,13 +50,6 @@ function capitalizeFirstLetter(string: String) {
     <select v-model="selectedSubCat" v-if="selectedCategory != undefined">
       <option v-for="category in selectedCategory.categories" :value="category">{{ category.name }}</option>
     </select>
-    <!-- <p>{{ selectedCategory?.name }}</p>
-    <p>{{ selectedBudget?.name, "CSAR" }}</p>
-    <p>{{  selectedPayee?.name }}</p>
-    <p>{{ selectedMonths?.month }}</p> -->
-    <!-- <div v-for="transaction in budgetStore.transactions" :key="transaction.id">
-      <p>payee: {{ transaction.payee_name }}</p><p v-if="transaction.memo != null ">Memo: {{ transaction.memo }}</p>
-    </div> -->
     <div v-for="cat in sortingCategories" :key="cat?.id">
       <p> Amount: {{ cat?.amount }}</p>
       <p v-if="cat.memo != null">Memo: {{ cat?.memo }}</p>
