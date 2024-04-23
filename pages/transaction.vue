@@ -19,7 +19,7 @@ var newTransaction = {
 onBeforeMount(() => {
     const budgetId = budgetStore.selectedBudget.id
     budgetStore.getCategories(budgetId)
-    budgetStore.getPayee(budgetId)
+    budgetStore.getPayees(budgetId)
 })
 </script>
 <template>
@@ -32,7 +32,7 @@ onBeforeMount(() => {
         </select><br/>
         <p>Category</p>
         <select v-model="category" v-if="budgetStore.categories.length != 0">
-            <option v-for="cat in budgetStore.categories" :key="cat.id" :value="cat">{{ cat.name }}</option>
+            <option v-for="cat in budgetStore.categories" :key="cat?.id" :value="cat">{{ cat.name }}</option>
         </select><br/>
         <p>memo</p>
         <input type="text"><br/>
