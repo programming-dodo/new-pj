@@ -43,17 +43,10 @@ function capitalizeFirstLetter(string: String) {
 </script>
 <template>
   <div>
-    <button @click="budgetStore.getBudgets()" v-if="budgetStore.selectedBudget == null">Load Data</button>
     <button @click="budgetStore.getMonths(budgetStore.selectedBudget.id)" v-if="budgetStore.selectedBudget != null">Get Months</button>
     <button @click="budgetStore.getPayees(budgetStore.selectedBudget.id)" v-if="budgetStore.selectedBudget != null">Payees</button>
     <button @click="budgetStore.getCategories(budgetStore.selectedBudget.id)" v-if="budgetStore.selectedBudget != null">displayCategories</button>
     <button @click="budgetStore.getTransactions(budgetStore.selectedBudget.id)" v-if="budgetStore.selectedBudget != null">display transactions</button>
-    <select v-model="budgetStore.selectedBudget">
-      <option disabled >budget</option>
-      <option v-for="budget in budgetStore.budgets" :value="budget" :key="budget.id">
-        {{ budget.name }}
-      </option>
-    </select>
     <select v-model="selectedCategory" v-if="budgetStore.categories.length != 0">
       <option v-for="cat in budgetStore.categories" :key="cat.id" :value="cat">{{ cat.name }}</option>
     </select>
