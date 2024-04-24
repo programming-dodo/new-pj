@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useBudgetStore } from '../stores/BudgetStore';
-
+import {utils} from 'ynab'
 const budgetStore = useBudgetStore()
 var selectedCategory = ref()
 var selectedMonths = ref()
@@ -10,19 +10,35 @@ var selectedSubCat = ref()
 var sortingCategories = computed(()=> {
   var givingBack: any[] | undefined = []
   if (selectedSubCat.value != undefined) {
-  budgetStore.transactions.forEach((transaction) => {
-    console.log("TCI", transaction.category_id, transaction.category_name,"SCI", selectedSubCat.value?.id)
-    if (transaction.category_id == selectedSubCat.value?.id) {
-      givingBack?.push(transaction)
-    }
-  })
-  return givingBack
-}
-
+    budgetStore.transactions.forEach((transaction) => {
+      if (transaction?.category_id == selectedSubCat.value?.id) {
+        givingBack?.push(transaction)
+      }
+    })
+    return givingBack
+  }
 })
+function moneyFormat(moneyDinero: number) {
+  return utils.convertMilliUnitsToCurrencyAmount(moneyDinero)
+}
 function capitalizeFirstLetter(string: String) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+ var sortingDate = computed(()=>{
+  var givingBack: any[] | undefined = []
+  if (selectedMonths.value != undefined ) {
+    budgetStore.transactions.forEach((transaction) => {
+      var tmy = transaction.date.slice(0, 7)
+      var smy = selectedMonths.value.month.slice(0,7)
+      console.log(tmy, smy) 
+      if (tmy == smy) {
+        givingBack?.push(transaction)
+      }
+    })
+    return givingBack
+  }
+ })
 
 </script>
 <template>
@@ -51,9 +67,15 @@ function capitalizeFirstLetter(string: String) {
       <option v-for="category in selectedCategory.categories" :value="category">{{ category.name }}</option>
     </select>
     <div v-for="cat in sortingCategories" :key="cat?.id">
-      <p> Amount: {{ cat?.amount }}</p>
+      <p> Amount: {{ moneyFormat(cat?.amount) }}</p>
       <p v-if="cat.memo != null">Memo: {{ cat?.memo }}</p>
       <p>Payee: {{ capitalizeFirstLetter(cat?.payee_name) }}</p>
+    </div>
+    <div v-for="transaction in sortingDate" :key="transaction?.id">
+      <p> Amount: {{ moneyFormat(transaction?.amount) }}</p>
+      <p v-if="transaction.memo != null">Memo: {{ transaction?.memo }}</p>
+      <p>Payee: {{ capitalizeFirstLetter(transaction?.payee_name) }}</p>
+      <p>Date: {{ transaction.date }}</p>
     </div>
   </div>
 </template>
