@@ -1,0 +1,49 @@
+<script setup lang="ts">
+import { onBeforeMount } from 'vue';
+import { useBudgetStore } from '../stores/BudgetStore'
+const budgetStore = useBudgetStore()
+var date = ref()
+var payee = ref()
+var category = ref()
+var newTransaction = {
+    accountId: "",
+    date: Date,
+    payee_id: String,
+    payee_name: String,
+    //nq
+    memo: String,
+    //maxLength: 200, nullable: true
+    cleared: String,
+    //options [cleared, uncleared, reconciled]
+}
+onBeforeMount(() => {
+    const budgetId = budgetStore.selectedBudget.id
+    budgetStore.getCategories(budgetId)
+    budgetStore.getPayees(budgetId)
+})
+</script>
+<template>
+    <div>
+        <p>Date</p>
+        <input type="date" v-model="date"><br/>
+        <p>Payee</p>
+        <select v-if="budgetStore.payees.length != 0" v-model="payee">
+            <option v-for="payee in budgetStore.filterPayees" :key="payee?.id" :value="payee"> {{ payee?.name }}</option>
+        </select><br/>
+        <p>Category Group</p>
+        <select v-model="category" v-if="budgetStore.categories.length != 0">
+            <option v-for="cat in budgetStore.categories" :key="cat?.id" :value="cat">{{ cat.name }}</option>
+        </select><br/>
+        <p>Sub Category</p>
+        <select>
+            <option v-for="subCategory in category" :value="subCategory">{{ subCategory }}</option>
+        </select>
+        <p>memo</p>
+        <input type="text"><br/>
+        <p>outflow</p>
+        <input type="text"><br/>
+        <p>inflow</p>
+        <input type="text"><br/>
+        <button>Save Transaction</button>
+    </div>
+</template>
