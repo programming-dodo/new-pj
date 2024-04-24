@@ -2,12 +2,13 @@ import { defineStore } from "pinia";
 
 export const useBudgetStore = defineStore('budgets', {
     state:  () => ({
-      token: process.env.YNAB_TOKEN as string,
+      token: process.env.YNAB_TOKEN as String,
       budgets: [],
       categories: [],
       payees: [],
       months: [],
       transactions: [],
+      accounts: [],
       selectedBudget: null
     }), 
     actions: {
@@ -24,7 +25,7 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.budgets.forEach((element) => this.budgets.push(element));
         })
       },
-      async getTransactions(budgetId: string) {
+      async getTransactions(budgetId: String) {
         await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
           headers: { Authorization: `Bearer ${this.token}`}
         }).then((response) => {
@@ -32,7 +33,7 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.transactions.forEach((element) => this.transactions.push(element))
         })
       },
-      async getCategories(budgetId: string) {
+      async getCategories(budgetId: String) {
         await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/categories`, {
           headers: { Authorization: `Bearer ${this.token}`}
         }).then((response) => {
@@ -40,7 +41,7 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.category_groups.forEach((element) => this.categories.push(element))
         })
       },
-      async getPayees(budgetId: string) {
+      async getPayees(budgetId: String) {
         await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/payees`, {
           headers: {Authorization: `Bearer ${this.token}`}
         }).then((response) => {
@@ -48,7 +49,7 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.payees.forEach((element) => this.payees.push(element))
         })
       },
-      async getBalance(budgetId: string) {
+      async getBalance(budgetId: String) {
         await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/balance`,{
           headers: {Authorization: `Bearer ${this.token}`}
         }).then((response)=> {
@@ -56,7 +57,7 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.balance.forEach((element) => this.getBalance.push(element))
         })
       },
-      async getMonths(budgetId: string) {
+      async getMonths(budgetId: String) {
         await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/months`, {
           headers: {Authorization: `Bearer ${this.token}`}
         }).then((response) => {
@@ -64,6 +65,14 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.months.forEach((element) => this.months.push(element))
         })
       },
+      async getUsers(budgetId: String) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/accounts`, {
+          headers: {Authorization: `Bearer ${this.token}`}
+        }).then((response) => {
+          this.accounts.length = 0
+          response.data.accounts.forEach((account) => this.accounts.push(account))
+        })
+      }
     },
     getters: {
       filterPayees() {
