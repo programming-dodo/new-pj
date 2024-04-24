@@ -6,7 +6,7 @@ var date = ref()
 var payee = ref()
 var category = ref()
 var newTransaction = {
-    accountId: String,
+    accountId: "",
     date: Date,
     payee_id: String,
     payee_name: String,
@@ -30,10 +30,14 @@ onBeforeMount(() => {
         <select v-if="budgetStore.payees.length != 0" v-model="payee">
             <option v-for="payee in budgetStore.filterPayees" :key="payee?.id" :value="payee"> {{ payee?.name }}</option>
         </select><br/>
-        <p>Category</p>
+        <p>Category Group</p>
         <select v-model="category" v-if="budgetStore.categories.length != 0">
             <option v-for="cat in budgetStore.categories" :key="cat?.id" :value="cat">{{ cat.name }}</option>
         </select><br/>
+        <p>Sub Category</p>
+        <select>
+            <option v-for="subCategory in category" :value="subCategory">{{ subCategory }}</option>
+        </select>
         <p>memo</p>
         <input type="text"><br/>
         <p>outflow</p>
