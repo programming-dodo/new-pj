@@ -32,17 +32,7 @@ async function saveTransaction() {
         flag_color: null, 
         import_id: null
     }
-    await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
-        headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${budgetStore.token}`},
-        method: 'POST',
-        body: {transaction: newTransaction}
-    }).then((response) => {
-        console.log(response)
-    }).catch((error) => {
-        console.log("error: ", error)
-    })
+    budgetStore.postTransaction(newTransaction, budgetId)
 }
 function addToTransactionArray() {
     var newTransaction = {
@@ -62,17 +52,7 @@ function addToTransactionArray() {
     console.log(transnactions)
 }
 async function postMany() {
-    await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
-        headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${budgetStore.token}`},
-        method: 'POST',
-        body: {transactions: transnactions}
-    }).then((response) => {
-        console.log(response)
-    }).catch((error) => {
-        console.log("error: ", error)
-    })
+    budgetStore.postTransactions(transnactions, budgetId)
 }
 </script>
 <template>

@@ -7,6 +7,7 @@ var selectedMonths = ref()
 var selectedPayee = ref()
 var selectedSubCat = ref()
 var displayedTransaction = ref([])
+const emptyDecimal = (.00)
 watch(selectedSubCat, () => {
   var newArray: never[] =[]
   if (selectedSubCat.value != undefined) {
@@ -85,7 +86,8 @@ function resetFilters() {
       </select>
     </div>
     <div v-for="transaction in displayedTransaction" :key="transaction?.id">
-      <p> Amount: {{ moneyFormat(transaction?.amount) }}</p>
+      <div v-if="transaction.length = 2">Amount: {{ moneyFormat(transaction?.amount)}}<p>.00</p>  </div>
+      <div>Amount: {{ moneyFormat(transaction?.amount)}}<p>.00</p>  </div>
       <p v-if="transaction.memo != null">Memo: {{ transaction?.memo }}</p>
       <p>Payee: {{ capitalizeFirstLetter(transaction?.payee_name) }}</p>
     </div>

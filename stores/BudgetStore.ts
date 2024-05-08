@@ -12,9 +12,30 @@ export const useBudgetStore = defineStore('budgets', {
       selectedBudget: null
     }), 
     actions: {
-      async postTransaction() {
-        await fetch("",{
-
+      async postTransaction(transaction: any, budgetId: any) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
+        headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`},
+        method: 'POST',
+        body: {transaction: transaction}
+        }).then((response) => {
+            console.log(response)
+        }).catch((error) => {
+            console.log("error: ", error)
+        })
+      },
+      async postTransactions(transnactions: any, budgetId: any) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
+        headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`},
+        method: 'POST',
+        body: {transactions: transnactions}
+        }).then((response) => {
+            console.log(response)
+        }).catch((error) => {
+            console.log("error: ", error)
         })
       },
       async getBudgets() {
@@ -72,7 +93,7 @@ export const useBudgetStore = defineStore('budgets', {
           this.accounts.length = 0
           response.data.accounts.forEach((account) => this.accounts.push(account))
         })
-      }
+      },
     },
     getters: {
       filterPayees() {
