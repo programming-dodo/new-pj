@@ -9,6 +9,7 @@ var categoryGroup = ref()
 var category = ref()
 var memo =  ref()
 var amount = ref()
+var transnactions: { account_id: any; date: any; amount: any; payee_id: any; payee_name: any; category_id: any; memo: any; cleared: string; approved: boolean; flag_color: null; import_id: null; }[] = []
 // var inflow = ref()
 
 const budgetId = budgetStore.selectedBudget.id
@@ -37,6 +38,36 @@ async function saveTransaction() {
         Authorization: `Bearer ${budgetStore.token}`},
         method: 'POST',
         body: {transaction: newTransaction}
+    }).then((response) => {
+        console.log(response)
+    }).catch((error) => {
+        console.log("error: ", error)
+    })
+}
+function addToTransactionArray() {
+    var newTransaction = {
+        account_id: account.value?.id,
+        date: date.value,
+        amount: amount.value,
+        payee_id: payee.value?.id,
+        payee_name: payee.value?.name,
+        category_id: category.value?.id,
+        memo: memo.value,
+        cleared: 'uncleared',
+        approved: false,
+        flag_color: null, 
+        import_id: null
+    }
+    transnactions.push(newTransaction)
+    console.log(transnactions)
+}
+async function postMany() {
+    await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
+        headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${budgetStore.token}`},
+        method: 'POST',
+        body: {transactions: transnactions}
     }).then((response) => {
         console.log(response)
     }).catch((error) => {
@@ -81,6 +112,8 @@ async function saveTransaction() {
         <input type="text" v-model="amount"><br/>
         <!-- <p>inflow</p>
         <input type="text" v-model="inflow"><br/> -->
+        <button @click="addToTransactionArray()">add to array list</button>
         <button @click="saveTransaction()">Save Transaction</button>
+        <button @click="postMany()">Save Array</button>
     </div>
 </template>
