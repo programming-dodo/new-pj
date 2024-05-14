@@ -62,6 +62,14 @@ export const useBudgetStore = defineStore('budgets', {
           response.data.category_groups.forEach((element) => this.categories.push(element))
         })
       },
+      async getAccounts(budgetId: string) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/accounts`, {
+          headers: {Authorization: `Bearer ${this.token}`}
+        }).then((response) => {
+          this.payees.length=0
+          response.data.accouonts.forEach((element) => this.payees.push(element))
+        })
+      },
       async getPayees(budgetId: String) {
         await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/payees`, {
           headers: {Authorization: `Bearer ${this.token}`}

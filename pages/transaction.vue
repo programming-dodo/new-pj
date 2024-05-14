@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
 import { useBudgetStore } from '../stores/BudgetStore'
+import transactions from '../data/transactions.json'
 const budgetStore = useBudgetStore()
 var date = ref()
 var account = ref()
@@ -35,6 +36,7 @@ async function saveTransaction() {
     budgetStore.postTransaction(newTransaction, budgetId)
 }
 function addToTransactionArray() {
+    console.log(transactions)
     var newTransaction = {
         account_id: account.value?.id,
         date: date.value,
