@@ -5,18 +5,20 @@ import {utils} from 'ynab'
 const budgetStore = useBudgetStore()
 let actVal= ref()
 
-async function pullAccount(){
-   if (budgetStore.Account.length == 0){
-        budgetStore.getAccount(budgetStore.selectedBudget.id)
+async function pullAccounts(){
+   if (budgetStore.Accounts.length === 0){
+        budgetStore.getAccounts(budgetStore.selectedBudget.id)
     }
-    actVal.value = budgetStore.Account
+    actVal.value = budgetStore.accounts
 }
+
+
 
 </script>
 
 
 
 <template>
-<button @click="pullAccount">Get Account</button>    
-<p v-for="category in actVal">{{ account.name }}</p>
+<button @click="pullAccounts">Get Accounts</button>    
+<p>{{ actVal }}</p>
 </template>

@@ -2,6 +2,7 @@
 import { onBeforeMount } from 'vue';
 import { useBudgetStore } from '../stores/BudgetStore'
 import transactions from '../data/transactions.json'
+import { useTimeShift, findSymbol } from '~/functions';
 const budgetStore = useBudgetStore()
 var date = ref()
 var account = ref()
@@ -12,7 +13,7 @@ var memo =  ref()
 var amount = ref()
 var transnactions: { account_id: any; date: any; amount: any; payee_id: any; payee_name: any; category_id: any; memo: any; cleared: string; approved: boolean; flag_color: null; import_id: null; }[] = []
 // var inflow = ref()
-
+//@ts-ignore
 const budgetId = budgetStore.selectedBudget.id
 onBeforeMount(() => {
     budgetStore.getCategories(budgetId)
@@ -56,6 +57,25 @@ function addToTransactionArray() {
 async function postMany() {
     budgetStore.postTransactions(transnactions, budgetId)
 }
+function preCreated() {
+    if (category.value?.id != null) {
+        let dataArray: any[] = []
+        transactions.forEach((transaction) => {
+        let date = new Date()
+        let month = useTimeShift(date, 'month', 1, 'subtrac')
+        let stringed = JSON.stringify(transaction)
+        let a = JSON.stringify(findSymbol(true, false, stringed, month!))
+        let id = JSON.parse(JSON.parse(JSON.stringify(findSymbol(false, true, a, category.value?.id))))
+        dataArray.push(id)
+    });
+    dataArray.forEach((trans) => {
+        let sendTransaction = JSON.parse(trans)
+        budgetStore.postTransaction(sendTransaction, budgetId)
+    });
+    } else {
+        alert('Need to select a category')
+    }
+}
 </script>
 <template>
     <div>
@@ -97,5 +117,7 @@ async function postMany() {
         <button @click="addToTransactionArray()">add to array list</button>
         <button @click="saveTransaction()">Save Transaction</button>
         <button @click="postMany()">Save Array</button>
+        <h2>Pre Created Select Categorie</h2>
+        <button @click="preCreated()">post</button>
     </div>
 </template>

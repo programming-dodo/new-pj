@@ -3,39 +3,33 @@
         "account_id": "70452ac8-6f2e-4c06-ad85-7c6faa1458ea",
         "date": "%lastMonth%",
         "amount": "4324",
-        "payee_id": null,
+        "payee_id": "b12d50d0-47d0-4127-8f62-083356bc034b",
         "payee_name": "MCDonalds",
         "category_id": "@category.id@",
         "memo": "memo.value",
         "cleared": "uncleared",
-        "approved": false,
-        "flag_color": null, 
-        "import_id": null
+        "approved": false
     },
     {
         "account_id": "70452ac8-6f2e-4c06-ad85-7c6faa1458ea",
         "date": "%lastMonth%",
         "amount": "49",
-        "payee_id": null,
+        "payee_id": "b12d50d0-47d0-4127-8f62-083356bc034b",
         "payee_name": "Meijer",
         "category_id": "@category.id@",
         "memo": "memo.value",
         "cleared": "uncleared",
-        "approved": false,
-        "flag_color": null, 
-        "import_id": null
+        "approved": false
     },
     {
         "account_id": "70452ac8-6f2e-4c06-ad85-7c6faa1458ea",
         "date": "%lastMonth%",
         "amount": "20",
-        "payee_id": null,
+        "payee_id": "b12d50d0-47d0-4127-8f62-083356bc034b",
         "payee_name": "BestBuy",
         "category_id": "@category.id@",
         "memo": "memo.value",
         "cleared": "uncleared",
-        "approved": false,
-        "flag_color": null, 
-        "import_id": null
+        "approved": false
     }
 ]

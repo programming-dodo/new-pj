@@ -1,17 +1,29 @@
-
-export function useTimeShift(date: Date, days: number | null, months: number | null, add: boolean) {
-    const results = new Date(date)
-    if (days != null) {
+export function useTimeShift(date: Date, day: 'month' | 'day', months: number, add: 'add' | 'subtrac'){
+    if (day == 'day') {
+        let d: Date
         if (add) {
-            return date.setDate(date.getDate() + days);
+            d = new Date(date.setDate(date.getDate() + months));
         } else {
-            return date.setDate(date.getDate() - days);
+            d =  new Date(date.setDate(date.getDate() - months));
         }
-    } else if (months != null) {
-        if (add) {
-            return date.setMonth(date.getMonth() + months)
+        let formated = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate()
+        return formated
+    } else if(day === 'month') {
+        let dl: Date
+        if (add === 'add') {
+            dl = new Date(date.setMonth(date.getMonth() + months!))
         } else {
-            return date.setMonth(date.getMonth() - months);
+            dl = new Date(date.setMonth(date.getMonth() - months!))
         }
+        let formatted = dl.getFullYear() + '-' + dl.getMonth() + '-' + dl.getDate()
+        return formatted
+    }
+}
+export function findSymbol(date: boolean, id: boolean, data: String, replaceString: string) {
+    if (date!= false){
+        return data.replace(/(%.*%)/gm, replaceString)
+    }else if (id != false) {
+        // console.log('id: ', id,'date: ', date)
+        return data.replace(/(@.*@)/gm, replaceString)
     }
 }
