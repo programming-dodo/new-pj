@@ -15,7 +15,7 @@ export function useTimeShift(date: Date, day: 'month' | 'day', months: number, a
         } else {
             dl = new Date(date.setMonth(date.getMonth() - months!))
         }
-        let formatted = dl.getFullYear() + '-' + dl.getMonth() + '-' + dl.getDate()
+        let formatted = dl.getFullYear() + '-' + 28 + '-' + dl.getDate()
         return formatted
     }
 }
