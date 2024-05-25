@@ -50,7 +50,7 @@ async function saveTransaction() {
         alert('must  fill in necessary fields')
     }
 }
-function addToTransactionArray() {
+function addToTransactionArray() {  
     var newTransaction: Transaction = {
         account_id: account.value?.id,
         date: date.value,
@@ -132,7 +132,7 @@ function preCreated() {
         <button @click="addToTransactionArray()">add to array list</button>
         <button @click="saveTransaction()">Save Transaction</button>
         <button @click="postMany()">Save Array</button>
-        <h2>Pre Created Select Categorie</h2>
+        <h2>Pre Created: select Category</h2>
         <button @click="preCreated()">post</button>
     </div>
 </template>
