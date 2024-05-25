@@ -4,6 +4,7 @@ const budgetStore = useBudgetStore()
 
 <template>
   <h3 v-if="budgetStore.budgets.length > 0">Select Budget</h3>
+  
   <button @click="budgetStore.getBudgets()" v-if="budgetStore.budgets.length == 0">Load Budgets</button>
   <select v-model="budgetStore.selectedBudget" v-if="budgetStore.budgets.length > 0">
     <option disabled >budget</option>

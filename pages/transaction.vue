@@ -12,6 +12,7 @@ var category = ref()
 var memo =  ref()
 var amount = ref()
 var transnactions: { account_id: any; date: any; amount: any; payee_id: any; payee_name: any; category_id: any; memo: any; cleared: string; approved: boolean; flag_color: null; import_id: null; }[] = []
+var maxDate = ref(useTimeShift(new Date(), 'day',0, 'add'))
 // var inflow = ref()
 //@ts-ignore
 const budgetId = budgetStore.selectedBudget.id
@@ -52,7 +53,6 @@ function addToTransactionArray() {
         import_id: null
     }
     transnactions.push(newTransaction)
-    console.log(transnactions)
 }
 async function postMany() {
     budgetStore.postTransactions(transnactions, budgetId)
@@ -78,9 +78,8 @@ function preCreated() {
 }
 </script>
 <template>
-    <div>
-        <p>Date</p>
-        <input type="date" v-model="date"><br/>
+    <div>        <p>Date</p>
+        <input type="date" v-model="date" min="1980-01-01" :max="maxDate"><br/>
         <div v-if="budgetStore.accounts.length != 0">
             <p>Account</p>
             <select v-model="account">
@@ -109,7 +108,7 @@ function preCreated() {
             </select>
         </div>
         <p>memo</p>
-        <input type="text" v-model="memo"><br/>
+        <textarea name="Memo" id="" cols="30" rows="5" v-model="memo" maxlength="200"></textarea>
         <p>amount</p>
         <input type="text" v-model="amount"><br/>
         <!-- <p>inflow</p>

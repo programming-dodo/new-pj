@@ -1,4 +1,14 @@
+export function checkDoubleDigit(number: number): String {
+    let r 
+    if (number < 10 ) {
+        r = '0' + number
+        return r
+    }
+    return JSON.stringify(number)
+}
 export function useTimeShift(date: Date, day: 'month' | 'day', months: number, add: 'add' | 'subtrac'){
+    let month 
+    let deay 
     if (day == 'day') {
         let d: Date
         if (add) {
@@ -6,7 +16,9 @@ export function useTimeShift(date: Date, day: 'month' | 'day', months: number, a
         } else {
             d =  new Date(date.setDate(date.getDate() - months));
         }
-        let formated = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate()
+        month = checkDoubleDigit(d.getMonth())
+        deay = checkDoubleDigit(d.getDate())
+        let formated = d.getFullYear() + '-' + month + '-' + deay
         return formated
     } else if(day === 'month') {
         let dl: Date
@@ -15,7 +27,9 @@ export function useTimeShift(date: Date, day: 'month' | 'day', months: number, a
         } else {
             dl = new Date(date.setMonth(date.getMonth() - months!))
         }
-        let formatted = dl.getFullYear() + '-' + 28 + '-' + dl.getDate()
+        month = checkDoubleDigit(dl.getMonth())
+        deay = checkDoubleDigit(dl.getDate())
+        let formatted = dl.getFullYear() + '-' + month + '-' + deay
         return formatted
     }
 }
@@ -23,7 +37,6 @@ export function findSymbol(date: boolean, id: boolean, data: String, replaceStri
     if (date!= false){
         return data.replace(/(%.*%)/gm, replaceString)
     }else if (id != false) {
-        // console.log('id: ', id,'date: ', date)
         return data.replace(/(@.*@)/gm, replaceString)
     }
 }
