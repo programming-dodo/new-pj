@@ -3,6 +3,8 @@ import { onBeforeMount } from 'vue';
 import { useBudgetStore } from '../stores/BudgetStore'
 import transactions from '../data/transactions.json'
 import { useTimeShift, findSymbol } from '~/functions';
+import type { Transaction } from '../types/ynab'
+
 const budgetStore = useBudgetStore()
 var date = ref()
 var account = ref()
@@ -21,8 +23,15 @@ onBeforeMount(() => {
     budgetStore.getPayees(budgetId)
     budgetStore.getUsers(budgetId)
 })
+function checkTransaction(tran: Transaction): Boolean {
+    if (tran.account_id != null && tran.date != null && tran.amount != null && tran.payee_name != null && tran.category_id != null) {
+        return true
+    } else {
+        return false
+    }
+}
 async function saveTransaction() {
-    var newTransaction = {
+    var newTransaction: Transaction = {
         account_id: account.value?.id,
         date: date.value,
         amount: amount.value,
@@ -35,11 +44,14 @@ async function saveTransaction() {
         flag_color: null, 
         import_id: null
     }
-    budgetStore.postTransaction(newTransaction, budgetId)
+    if (checkTransaction(newTransaction) === true) {
+        budgetStore.postTransaction(newTransaction, budgetId)
+    } else {
+        alert('must  fill in necessary fields')
+    }
 }
 function addToTransactionArray() {
-    console.log(transactions)
-    var newTransaction = {
+    var newTransaction: Transaction = {
         account_id: account.value?.id,
         date: date.value,
         amount: amount.value,
@@ -52,7 +64,11 @@ function addToTransactionArray() {
         flag_color: null, 
         import_id: null
     }
-    transnactions.push(newTransaction)
+    if (checkTransaction(newTransaction) === true) {
+        transnactions.push(newTransaction)
+    } else {
+        alert('must fill in necessary fields')
+    }
 }
 async function postMany() {
     budgetStore.postTransactions(transnactions, budgetId)
@@ -78,10 +94,12 @@ function preCreated() {
 }
 </script>
 <template>
-    <div>        <p>Date</p>
+    <div>
+        <h2>New Transaction</h2>     
+        <h4>Date *</h4>
         <input type="date" v-model="date" min="1980-01-01" :max="maxDate"><br/>
         <div v-if="budgetStore.accounts.length != 0">
-            <p>Account</p>
+            <h4>Account *</h4>
             <select v-model="account">
                 <option disabled>Accounts</option>
                 <option :value="account" v-for="account in budgetStore.accounts" :key="account?.id">
@@ -90,29 +108,27 @@ function preCreated() {
             </select>
         </div>
         <div v-if="budgetStore.payees.length != 0">
-            <p>Payee</p>
+            <h4>Payee *</h4>
             <select v-model="payee">
                 <option v-for="payee in budgetStore.filterPayees" :key="payee?.id" :value="payee"> {{ payee?.name }}</option>
             </select><br/>
         </div>
         <div v-if="budgetStore.categories.length != 0">
-            <p>categoryGroup</p>
+            <h4>categoryGroup *</h4>
             <select v-model="categoryGroup">
                 <option v-for="cat in budgetStore.categories" :key="cat?.id" :value="cat">{{ cat.name }}</option>
             </select>
         </div>
         <div v-if="categoryGroup != null">
-            <p>Category</p>
+            <h4>Category *</h4>
             <select v-model="category">
                 <option v-for="category in categoryGroup.categories" :value="category">{{ category.name }}</option>
             </select>
         </div>
-        <p>memo</p>
+        <h4>Memo: optional</h4>
         <textarea name="Memo" id="" cols="30" rows="5" v-model="memo" maxlength="200"></textarea>
-        <p>amount</p>
+        <h4>Amount *</h4>
         <input type="text" v-model="amount"><br/>
-        <!-- <p>inflow</p>
-        <input type="text" v-model="inflow"><br/> -->
         <button @click="addToTransactionArray()">add to array list</button>
         <button @click="saveTransaction()">Save Transaction</button>
         <button @click="postMany()">Save Array</button>
