@@ -45,7 +45,7 @@ async function saveTransaction() {
         import_id: null
     }
     if (checkTransaction(newTransaction) === true) {
-        budgetStore.postTransaction(newTransaction, budgetId)
+        budgetStore.postTransaction(newTransaction)
     } else {
         alert('must  fill in necessary fields')
     }
@@ -71,25 +71,13 @@ function addToTransactionArray() {
     }
 }
 async function postMany() {
-    budgetStore.postTransactions(transnactions, budgetId)
+    budgetStore.postTransactions(transnactions)
 }
 function preCreated() {
-    if (category.value?.id != null) {
-        let dataArray: any[] = []
-        transactions.forEach((transaction) => {
-        let date = new Date()
-        let month = useTimeShift(date, 'month', 1, 'subtrac')
-        let stringed = JSON.stringify(transaction)
-        let a = JSON.stringify(findSymbol(true, false, stringed, month!))
-        let id = JSON.parse(JSON.parse(JSON.stringify(findSymbol(false, true, a, category.value?.id))))
-        dataArray.push(id)
-    });
-    dataArray.forEach((trans) => {
-        let sendTransaction = JSON.parse(trans)
-        budgetStore.postTransaction(sendTransaction, budgetId)
-    });
+    if (budgetStore.selectedCategory != null) {
+        budgetStore.preCreated()
     } else {
-        alert('Need to select a category')
+        alert('Please select a category')
     }
 }
 </script>
@@ -121,7 +109,7 @@ function preCreated() {
         </div>
         <div v-if="categoryGroup != null">
             <h4>Category *</h4>
-            <select v-model="category">
+            <select v-model="budgetStore.selectedCategory">
                 <option v-for="category in categoryGroup.categories" :value="category">{{ category.name }}</option>
             </select>
         </div>
