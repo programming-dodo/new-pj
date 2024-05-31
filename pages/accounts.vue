@@ -6,8 +6,8 @@ const budgetStore = useBudgetStore()
 let actVal= ref()
 
 async function pullAccounts(){
-   if (budgetStore.Accounts.length === 0){
-        budgetStore.getAccounts(budgetStore.selectedBudget.id)
+   if (budgetStore.accounts.length === 0){
+        budgetStore.getAccounts(budgetStore.selectedBudget!.id)
     }
     actVal.value = budgetStore.accounts
 }

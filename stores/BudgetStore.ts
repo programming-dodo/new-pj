@@ -1,4 +1,7 @@
 import { defineStore } from "pinia";
+import { stringifyQuery } from "vue-router";
+import { useTimeShift, findSymbol } from "~/functions";
+import transactions from '../data/transactions.json'
 
 export const useBudgetStore = defineStore('budgets', {
     state:  () => ({
@@ -9,11 +12,13 @@ export const useBudgetStore = defineStore('budgets', {
       months: [],
       transactions: [],
       accounts: [],
-      selectedBudget: null
+      selectedBudget: null,
+      selectedCategory: null,
+      error: '',
     }), 
     actions: {
-      async postTransaction(transaction: any, budgetId: any) {
-        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
+      async postTransaction(transaction: Transaction) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${this.selectedBudget!.id}/transactions`, {
         headers: { 
         'Content-Type': 'application/json',
         Authorization: `Bearer ${this.token}`},
@@ -25,8 +30,32 @@ export const useBudgetStore = defineStore('budgets', {
             console.log("error: ", error)
         })
       },
-      async postTransactions(transnactions: any, budgetId: any) {
-        await $fetch(`https://api.ynab.com/v1/budgets/${budgetId}/transactions`, {
+      preCreated() { 
+        let preCreates = transactions
+        if (this.selectedCategory!.id != null) {
+          let dataArray: any[] = []
+          preCreates.forEach((transaction) => {
+            let date = new Date()
+            let month = useTimeShift(date,'month', 1, 'subtrac')
+            let stringed = JSON.stringify(transaction)
+            let a = JSON.stringify(findSymbol(true, false, stringed, month!))
+            let id = JSON.stringify(JSON.parse(JSON.stringify(findSymbol(false, true, a, this.selectedCategory!.id))))
+            dataArray.push(id)
+          })
+          dataArray.forEach((transaction) => {
+            let sending = JSON.parse(transaction)
+              $fetch('/api/transactions/transaction', {
+                method: 'post',
+                body: {transaction: JSON.parse(sending), budgetId: this.selectedBudget!.id}
+              })
+            //call post transaction
+          })
+        } else {
+          this.error = 'Need to select a category'   
+        }
+      },
+      async postTransactions(transnactions: any) {
+        await $fetch(`https://api.ynab.com/v1/budgets/${this.selectedBudget!.id}/transactions`, {
         headers: { 
         'Content-Type': 'application/json',
         Authorization: `Bearer ${this.token}`},
