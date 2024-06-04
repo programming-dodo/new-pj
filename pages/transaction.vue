@@ -121,6 +121,6 @@ function preCreated() {
         <button @click="saveTransaction()">Save Transaction</button>
         <button @click="postMany()">Save Array</button>
         <h2>Pre Created: select Category</h2>
-        <button @click="preCreated()">post</button>
+        <button @click="preCreated()" class='btn btn-secondary'>post</button>
     </div>
 </template>
